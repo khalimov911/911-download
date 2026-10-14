@@ -757,6 +757,24 @@ body:not(.pgmode) .eco{padding-top:calc(var(--hh) - 36px)}
 @media (max-width:560px){.pg-chips{gap:6px;padding-top:8px}.pg-chips a{padding:7px 11px;font-size:13px;gap:6px}.pg-chips a svg{width:15px;height:15px}}
 @media (min-width:1001px){.ec{grid-template-columns:minmax(0,1fr);grid-template-areas:"i" "t";padding:20px 20px 64px;gap:10px;min-height:340px}.ec-i{width:120px;height:120px}.ec-i svg{width:116px;height:116px}.ec-t{padding-right:0}.ec-t span{font-size:14px}.ec-go{right:18px;bottom:18px}}
 .ec-i svg{overflow:visible}
+/* цвета как были раньше: меняем только иконки, окна, анимации */
+.eco:before{background:radial-gradient(closest-side,rgba(142,182,155,.16),transparent 70%)}
+.eco-k{color:var(--muted)}
+.eco-h{background:linear-gradient(180deg,#F4FBF5 30%,#9cc7a9 130%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.eco-h .gl{background:none;color:inherit;-webkit-text-fill-color:transparent;animation:none}
+.eco-note{color:var(--muted)}.eco-note path{stroke:var(--muted)}
+.ec{border-color:var(--line2);background:linear-gradient(150deg,rgba(35,83,71,.5),rgba(11,43,38,.7))}
+.ec:before{background:radial-gradient(260px circle at var(--mx) var(--my),rgba(142,182,155,.22),transparent 60%)}
+.ec:hover{border-color:rgba(142,182,155,.7);box-shadow:0 30px 60px -28px #000}
+.ec-i:before{background:radial-gradient(circle,rgba(142,182,155,.28),transparent 70%)}
+.ec-t small{color:var(--muted)}.ec-t span{color:var(--muted)}
+.ec-go{border-color:var(--e4);color:var(--e4)}.ec:hover .ec-go{background:var(--e4);color:#051F20}
+.eco-st b{color:var(--hi)}
+.pg-chips a{border-color:var(--line2);color:var(--ink)}
+.pg-hero h1 em{color:inherit;-webkit-text-fill-color:inherit}
+.pg-hero h1{color:var(--hi)}
+.pg-facts li{background:rgba(11,43,38,.7);border-color:var(--line)}.pg-facts li:hover{border-color:var(--line2)}
+.pg-fi{border-color:var(--line2);background:rgba(35,83,71,.5)}
 
 </style></head>
 <body>
