@@ -103,7 +103,7 @@ h2 { font-size: clamp(32px, 3.6vw, 66px); }
 .hint .ln i { position: absolute; left: 0; top: 0; width: 1px; height: 18px; background: #E8CB7C; }
 .final { left: 50%; top: auto; bottom: 9vh; margin: 0; transform: none; width: min(920px, calc(100vw - 40px)); max-width: none; text-align: center; }
 .final .wrap { transform: translateX(-50%); }
-.final::before { inset: -12vh -14vw -8vh -14vw; background: radial-gradient(closest-side, rgba(3,22,18,.72), rgba(3,22,18,0)); }
+.final::before { inset: -12vh -14vw -8vh -14vw; transform: translateX(calc(-50% + 14vw)); background: radial-gradient(ellipse closest-side, rgba(3,22,18,.72), rgba(3,22,18,0)); }
 .final .biz { font: 700 clamp(18px, 1.7vw, 30px) Corm; letter-spacing: .62em; padding-left: .62em; margin-bottom: 26px; }
 .final h2 { font-size: clamp(34px, 3.6vw, 64px); }
 .final .lead { margin: 18px auto 0; }
