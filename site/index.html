@@ -320,7 +320,7 @@ html:not(.ready) .foot { visibility: hidden; }
 </style>
 <style>
 .pp{display:none;position:fixed;inset:0;z-index:9999;overflow-y:auto;-webkit-overflow-scrolling:touch;background:#F6F1E6;color:#0B2B26;font:400 16px/1.65 Mont,system-ui,sans-serif}
-.pp:target{display:block}
+.pp:target,.pp:has(:target){display:block}
 .pp-in{max-width:760px;margin:0 auto;padding:24px 20px 72px}
 .pp-top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:28px}
 .pp-brand{font:600 14px Mont;color:#06583F;letter-spacing:.04em}
@@ -329,7 +329,7 @@ html:not(.ready) .foot { visibility: hidden; }
 .pp h1{font:600 clamp(24px,4vw,32px)/1.25 Mont;margin:0 0 8px;color:#0B2B26}
 .pp h2{font:600 19px/1.3 Mont;margin:32px 0 8px;color:#06583F}
 .pp p,.pp li{color:#24372F}
-.pp ul{padding-left:22px}
+.pp p{margin:0 0 12px}.pp ul,.pp ol{padding-left:24px;margin:0 0 12px}.pp li{margin:0 0 4px}
 .pp .muted{color:#5B6B63;font-size:14px}
 .pp h1,.pp h2,.pp p,.pp li{text-shadow:none;letter-spacing:normal;background:none;-webkit-text-fill-color:currentColor}
 </style>
@@ -493,8 +493,15 @@ vw.addEventListener("touchend",function(e){if(sx===null)return;var t=e.changedTo
 <h2>6. Копии базы</h2>
 <p>Копию базы вы сохраняете сами в выбранное место (файлы телефона, Telegram, компьютер). Храните её бережно: в ней данные мойки и клиентов.</p>
 
-<h2>7. Удаление данных</h2>
-<p>Все данные удаляются вместе с приложением (или через «Очистить данные» в настройках Android). У разработчика данных нет, поэтому удалять у него нечего.</p>
+<h2 id="car-wash-delete">7. Удаление данных</h2>
+<p>Данные мойки, клиентов и отчёты хранятся только на телефоне и удаляются вместе с приложением (или через «Очистить данные» в настройках Android).</p>
+<p><b>Как удалить справку о лицензии Car wash у разработчика</b> (Khalimov M. S.):</p>
+<ol>
+  <li>Откройте Car wash → Настройки → Лицензия и перепишите «Код этого телефона».</li>
+  <li>Напишите на <b>911tjk@gmail.com</b> или в Telegram <b>@kassir911</b>: «Удалите справку Car wash» и код телефона.</li>
+  <li>Справка (код телефона, режим, ключ, дата начала пробного периода, версия) удаляется в течение 30 дней, вам придёт ответ.</li>
+</ol>
+<p>Без запроса справка хранится у разработчика для поддержки лицензии.</p>
 
 <h2>8. Дети</h2>
 <p>Приложение предназначено для работы автомойки и не рассчитано на детей.</p>
@@ -502,6 +509,6 @@ vw.addEventListener("touchend",function(e){if(sx===null)return;var t=e.changedTo
 <h2>9. Изменения</h2>
 <p>Если политика изменится, новая версия появится на этой странице с новой датой.</p>
 </div></section>
-<script>(()=>{var t=document.title,f=()=>{var on=location.hash==="#car-wash-privacy";document.documentElement.style.overflow=on?"hidden":"";document.title=on?"Car wash — политика конфиденциальности":t};addEventListener("hashchange",f);f()})();</script>
+<script>(()=>{var t=document.title,f=()=>{var h=location.hash,on=h==="#car-wash-privacy"||h==="#car-wash-delete";if(h==="#car-wash-delete")setTimeout(()=>{var e=document.getElementById("car-wash-delete");e&&e.scrollIntoView()},0);document.documentElement.style.overflow=on?"hidden":"";document.title=on?"Car wash — политика конфиденциальности":t};addEventListener("hashchange",f);f()})();</script>
 </body>
 </html>
