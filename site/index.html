@@ -64,7 +64,10 @@ a{color:inherit}
 .flight{position:relative;height:auto}
 .js .flight{height:calc(var(--frames,12) * var(--step,118vh) + 190vh)} /* 12 кадров: шаг длиннее — глава читается так же долго */
 .stage{position:relative;min-height:100vh;overflow:hidden;background:var(--em1)}
-.js .stage{position:sticky;top:0;height:100vh;height:100svh}
+.js .stage{position:sticky;top:0;min-height:0;height:100vh;height:100lvh}
+/* сцена — во весь «большой» экран (панель браузера спрятана), чтобы картинка не прыгала,
+   когда панель Chrome появляется/прячется; текст и кнопка стоят над нижней кромкой
+   «малого» экрана (панель видна) — владелец 2026-11-20: «кнопка не видно» */
 #bg,#dust,#fx{position:absolute;inset:0;width:100%;height:100%;display:block}
 #fx{overflow:visible;pointer-events:none}
 #dust{pointer-events:none}
@@ -201,10 +204,13 @@ a{color:inherit}
   .badge{min-width:44px;height:32px;padding:0 8px;border-radius:8px}.badge .num{font-size:16px}
   .logo{gap:8px}.lg911{height:30px}.lb{font-size:12.5px;letter-spacing:.28em;margin-right:-.28em}.ld{font-size:9px;margin-top:4px;gap:5px}
   .vframe{inset:4px;border-radius:9px}
-  .js .flight{--step:104vh}
+  .js .flight{--step:85vh} /* короче шаг — картинка отзывается на палец сразу */
   .shade{background:linear-gradient(0deg,rgba(var(--field),.97) 0%,rgba(var(--field),.92) 34%,rgba(var(--field),.66) 52%,rgba(var(--field),.2) 64%,rgba(var(--field),0) 72%),linear-gradient(180deg,rgba(0,0,0,.4) 0%,rgba(0,0,0,0) 18%)}
   .ch::before{inset:-10% -8% -8% -8%}
-  .js .ch,.js .ch.last{left:16px;right:16px;width:auto;top:auto;bottom:max(26px,env(safe-area-inset-bottom));transform:none}
+  .js .ch,.js .ch.last{left:16px;right:16px;width:auto;top:auto;bottom:max(24px,calc(env(safe-area-inset-bottom) + 14px));transform:none}
+  @supports (height:100lvh){.js .ch,.js .ch.last{bottom:calc(100lvh - 100svh + max(24px,calc(env(safe-area-inset-bottom) + 14px)))}}
+  .js .ch .w{transition-duration:.45s,.5s,.5s;transition-delay:calc(var(--i) * 22ms)}
+  .js .ch .btn,.js .ch .row,.js .ch .since{transition-delay:.15s}
   .hl{font-size:clamp(28px,8.6vw,40px)}
   .tx{font-size:17px;margin-bottom:1.1em}
   .btn{display:flex;width:100%;min-height:62px;padding:6px 16px 6px 12px;font-size:clamp(16px,5.6vw,23px);line-height:1.15;white-space:normal;text-align:center;gap:10px}.btn .tg{width:clamp(36px,12vw,48px);height:auto;aspect-ratio:96/87}.btn .ar{width:clamp(20px,7vw,28px);height:16px}
@@ -214,6 +220,11 @@ a{color:inherit}
   .finale{left:50%;top:24%;width:86vw}
   .grid,.grid.four{grid-template-columns:1fr}
   .card{padding:20px 18px}.card .ic{width:48px;height:48px;margin-bottom:12px}
+}
+@media (max-width:760px) and (max-height:700px){
+  .hl{font-size:clamp(24px,min(7.4vw,5.4svh),34px)}
+  .tx{font-size:15.5px;line-height:1.36;margin-bottom:.9em}
+  .btn{min-height:52px}
 }
 @media (min-width:761px) and (max-width:1060px){.grid,.grid.four{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-height:480px) and (min-width:761px){
@@ -666,8 +677,14 @@ window.addEventListener('load', function () { setTimeout(loadRest, 200); });
 /* ---------- размеры, прокрутка ---------- */
 var W = 0, Hh = 0, dpr = 1, phone = false, top0 = 0, travel = 1, hold = 0;
 var pT = 0, pS = 0, need = true, mx = 0, my = 0, mxS = 0, myS = 0;
-function resize() {
-  W = innerWidth; Hh = innerHeight; phone = W <= 760;
+/* размеры берём у сцены (она во весь «большой» экран и не меняется, когда панель
+   браузера на телефоне появляется/прячется) — иначе положение и картинка дёргаются */
+var lastW = -1, lastH = -1;
+function resize(force) {
+  var w = stage.clientWidth || innerWidth, h = stage.clientHeight || innerHeight;
+  if (force !== true && w === lastW && Math.abs(h - lastH) < 2) return;
+  lastW = w; lastH = h;
+  W = w; Hh = h; phone = W <= 760;
   dpr = Math.min(window.devicePixelRatio || 1, phone ? 2 : 1.5);
   bg.width = Math.round(W * dpr); bg.height = Math.round(Hh * dpr);
   ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high'; // сброс после смены размера; чётче при увеличении
@@ -688,6 +705,11 @@ function onScroll() {
 }
 addEventListener('scroll', onScroll, { passive: true });
 addEventListener('resize', resize);
+/* палец: прокрутка уже плавная сама — картинка идёт за ней почти без сглаживания;
+   колесо мыши — мягкое сглаживание, но без «залипания» */
+var touchMode = !!(window.matchMedia && matchMedia('(pointer:coarse)').matches);
+addEventListener('touchstart', function () { touchMode = true; }, { passive: true });
+addEventListener('wheel', function () { touchMode = false; }, { passive: true });
 addEventListener('pointermove', function (e) {
   if (e.pointerType !== 'mouse') return;
   mx = e.clientX / W * 2 - 1; my = e.clientY / Hh * 2 - 1;
@@ -869,12 +891,12 @@ var last = 0, running = true, raf = 0;
 function frame(now) {
   raf = requestAnimationFrame(frame);
   var t = now / 1000, dt = Math.min(0.05, last ? t - last : 0.016); last = t;
-  pS = RM ? pT : pS + (pT - pS) * Math.min(1, dt * 7);
+  pS = RM ? pT : pS + (pT - pS) * Math.min(1, dt * (touchMode ? 40 : 11));
   if (Math.abs(pT - pS) < 0.0005) pS = pT;
   mxS += (mx - mxS) * Math.min(1, dt * 3); myS += (my - myS) * Math.min(1, dt * 3);
   var k = Math.min(N - 1, Math.floor(pS)), u = pS - k;
   if (k >= N - 1) { k = N - 1; u = 0; }
-  var a = smooth(0.3, 1, u); // долгая мягкая смена кадров
+  var a = smooth(0.05, 0.9, u); // смена кадров начинается сразу, как только палец двинул страницу
   setChapter(CHAP(FR[Math.min(N - 1, Math.round(pS))].n));
   if (!failed && N) {
     var c1 = cam(k, u, t), im1 = imgs[k] || nearest(k);
@@ -949,7 +971,7 @@ lic.addEventListener('keydown', function (e) {
 });
 
 window.__site = { get p() { return pS; }, N: N, ns: FR.map(function (f) { return f.n; }), travel: function () { return travel; }, top0: function () { return top0; } };
-resize();
+resize(true);
 startLoop();
 })();
 </script>
